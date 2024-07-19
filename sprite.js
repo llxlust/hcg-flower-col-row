@@ -43,6 +43,7 @@ class Sprite{
 		if (delta>=1){
 			if (state==this.states.die){
 				if (!this.kill) this.game.removeInfo.count++;
+				console.log("delete")
 				this.kill = true;
 			}
 			if (state==this.states.spawn){
@@ -67,7 +68,7 @@ class Sprite{
 			case this.states.die:
 				this.scale = 1.0 + delta;
 				this.opacity = 1.0 - delta;
-				this.frameData = this.index === 6 ? this.game.spriteData.frames[6] : this.game.spriteData.frames[4];
+				this.frameData = this.index === 5 ? this.game.spriteData.frames[5] : this.game.spriteData.frames[4];
 				break;
 			case this.states.drop:
 				this.y += (state.moveY * dt);

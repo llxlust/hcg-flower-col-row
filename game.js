@@ -1,6 +1,7 @@
 // JavaScript Document
 class Game {
 	constructor() {
+		this.destroyList = []
 		this.canvas = document.getElementById("game");
 		this.context = this.canvas.getContext("2d");
 		this.lastRefreshTime = Date.now();
@@ -73,11 +74,13 @@ class Game {
 		}
 		this.gridSize.topleft = topleft;
 		const game = this;
+		this.canvas.addEventListener("loadstart",(e)=>{console.log("aaa")})
 		if ('ontouchstart' in window) {
 			this.canvas.addEventListener("touchstart", function (event) { game.tap(event); });
 		} else {
 			this.canvas.addEventListener("mousedown", function (event) { game.tap(event); });
 		}
+		this.canvas.addEventListener("mouseup",(event)=>{console.log("Here")})
 		this.state = "spawning";
 		this.refresh();
 	}
@@ -100,11 +103,13 @@ class Game {
 		do {
 			removed = false;
 			let i = 0;
+		
 			for (let sprite of this.sprites) {
 				if (sprite.kill) {
 					this.sprites.splice(i, 1);
 					this.clearGrid(sprite);
 					removed = true;
+					
 					break;
 				}
 				i++;
@@ -133,17 +138,58 @@ class Game {
 				}
 				break;
 		}
-
+	
 		for (let sprite of this.sprites) {
+			
 			if (sprite == null) continue;
 			sprite.update(dt);
 		}
+		for(let sprite of this.sprites){
+			if (this.state != "ready") return;
+			//Need to find this sprite in the flowers grid
+			let row, col, found = false;
+			//First put flags to show if they have been checked
+			for (let sprite of this.sprites) sprite.checked = false;
+			let i = 0;
+			for (row of this.flowers) {
+				col = row.indexOf(sprite);
+				if (col != -1) {
+					//Found it
+					row = i;
+					found = true;
+					break;
+				}
+				i++;
+			}
+			if (found && sprite.index === 5) {
+				const connected = this.getConnectedSprites(sprite.index, row, col);
+				if(connected.length > 2){
+					for(let sprite of connected){
+						sprite.state = sprite.states.die
+					}
+					this.score -= connected.length;
+					this.state = "removing";
+					this.removeInfo = { count: 0, total: connected.length };
+				}
+				// if (sprite.index === 6 && connected.length > 2) {
+				// 	for (let sprite of connected) {
+				// 		sprite.state = sprite.states.die;
+				// 	}
+				// 	this.score -= connected.length;
+				// 	this.state = "removing";
+				// 	this.removeInfo = { count: 0, total: connected.length };
+				// }
+			}
+			
+	}
 	}
 
-
+	checkBomb(){
+		
+	}
 
 	spawn(x, y) {
-		const index = Math.floor(Math.random() * 7);
+		const index = Math.floor(Math.random() * 6);
 		const frameData = this.spriteData.frames[index];
 		const s = new Sprite({
 			game: this,
@@ -206,6 +252,7 @@ class Game {
 		loc.y = mousePos.y * canvasScale;
 		for (let sprite of this.sprites) {
 			if (sprite.hitTest(loc)) {
+				console.log(sprite.index)
 				//Need to find this sprite in the flowers grid
 				let row, col, found = false;
 				//First put flags to show if they have been checked
@@ -223,13 +270,13 @@ class Game {
 				}
 				if (found) {
 					const connected = this.getConnectedSprites(sprite.index, row, col);
-					if (connected.length >= 3) {
+					if (connected.length >= 3 || sprite.index === 6) {
 						this.correctSfx.play();
 						for (let sprite of connected) {
 							sprite.state = sprite.states.die;
 						}
 						console.log(sprite.index)
-						if(sprite.index === 4){
+						if(sprite.index === 6){
 							this.score -= connected.length;
 						}else{
 							this.score += connected.length;
@@ -273,13 +320,12 @@ class Game {
 						}
 					}
 				}
-				console.log(connected)
 			}
 		} catch (e) {
 			console.log(`Problem with ${row},`)
 		}
 		sprite.checked = true;
-		console.log(`getConnectedSprites ${row},${col},${connected.length}`);
+		//console.log(`getConnectedSprites ${row},${col},${connected.length}`);
 		return connected;
 		function boundaryCheck(row, col) {
 			if (row < 0 || row >= grid.length || col < 0 || col >= grid[0].length) return false;
