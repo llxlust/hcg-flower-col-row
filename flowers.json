@@ -57,7 +57,7 @@
 "meta": {
 	"app": "http://www.codeandweb.com/texturepacker",
 	"version": "1.0",
-	"image": "flowers.png",
+	"image": "jewel.png",
 	"format": "RGBA8888",
 	"size": {"w":118,"h":172},
 	"scale": "1",

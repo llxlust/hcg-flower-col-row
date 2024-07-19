@@ -32,7 +32,7 @@ class Game {
 		});
 
 		const game = this;
-		this.loadJSON("flowers", function (data, game) {
+		this.loadJSON("jewel", function (data, game) {
 			game.spriteData = JSON.parse(data);
 			game.spriteImage = new Image();
 			game.spriteImage.src = game.spriteData.meta.image;
@@ -143,7 +143,7 @@ class Game {
 
 
 	spawn(x, y) {
-		const index = Math.floor(Math.random() * 5);
+		const index = Math.floor(Math.random() * 7);
 		const frameData = this.spriteData.frames[index];
 		const s = new Sprite({
 			game: this,
@@ -228,7 +228,13 @@ class Game {
 						for (let sprite of connected) {
 							sprite.state = sprite.states.die;
 						}
-						this.score += connected.length;
+						console.log(sprite.index)
+						if(sprite.index === 4){
+							this.score -= connected.length;
+						}else{
+							this.score += connected.length;
+						}
+						
 						this.state = "removing";
 						this.removeInfo = { count: 0, total: connected.length };
 					} else {

@@ -67,7 +67,7 @@ class Sprite{
 			case this.states.die:
 				this.scale = 1.0 + delta;
 				this.opacity = 1.0 - delta;
-				this.frameData = this.game.spriteData.frames[5];
+				this.frameData = this.index === 6 ? this.game.spriteData.frames[6] : this.game.spriteData.frames[4];
 				break;
 			case this.states.drop:
 				this.y += (state.moveY * dt);
