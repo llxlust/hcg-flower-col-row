@@ -1,21 +1,134 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-	<title>HTML5 Games - Flower Collapse </title>
-	<script src="game.js"></script>
-	<script src="sprite.js"></script>
-	<script src="SFX.js"></script>
-	<script>
-		document.addEventListener("DOMContentLoaded", function(event){
-			const game = new Game();
-			window.game = game;
-		});
-	</script>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <title>HTML5 Games - Flower Collapse</title>
+    <script src="game.js"></script>
+    <script src="sprite.js"></script>
+    <script src="SFX.js"></script>
+    <script></script>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      .layout {
+        width: 800px;
+        height: 140px;
+        background-color: #00000096;
+        position: absolute;
+        top: 230px;
+      }
+      .title {
+        width: 100%;
+        font-size: 1.3rem;
+        color: white;
+        padding: 5px 0;
+        display: flex;
+        justify-content: center;
+      }
+      button {
+        border: none;
+        outline: none;
+        padding: 10px 20px;
+        font-size: 2rem;
+        transition: 0.1s;
+      }
+      button:focus {
+        border: none;
+        outline: none;
+      }
+      button:hover {
+        cursor: pointer;
+        transform: translateY(-10px);
+        transition: 0.1s;
+      }
+      .wrap-btn {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+      .wrap-btn button:nth-child(1) {
+        background-color: rgb(77, 233, 77);
+      }
+      .wrap-btn button:nth-child(2) {
+        background-color: rgb(223, 233, 77);
+      }
+      .wrap-btn button:nth-child(3) {
+        background-color: rgb(233, 77, 77);
+      }
+      .thumbnail {
+        width: 800px;
+        height: 600px;
+        background-color: green;
+      }
+      .name {
+        width: 100%;
+        display: flex;
+        font-size: 3rem;
+        padding-top: 20px;
+        color: white;
+        justify-content: center;
+      }
+      .gif {
+        margin-top: 20px;
+        width: 500px;
+        height: 400px;
+      }
+      .wrap-gif {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+      .trigger {
+        margin-top: 20px;
+        color: #fff;
+        font-size: 2rem;
+        display: flex;
+        justify-content: center;
+      }
+      .trigger:hover {
+        color: #ffffffa2;
+        cursor: pointer;
+      }
+    </style>
+  </head>
 
-<body>
-	<canvas id="game" width="800" height="600" style="border:1px solid #000000;"></canvas>
-</body>
+  <body>
+    <canvas
+      id="game"
+      width="800"
+      height="600"
+      style="border: 1px solid #000000"
+    ></canvas>
+    <button
+      id="menu"
+      style="
+        text-shadow: 0px 3px 2px rgba(0, 0, 0, 0.6);
+        background-color: #fff;
+      "
+    >
+      Back to main menu
+    </button>
+    <div id="thumbnail" class="thumbnail">
+      <div class="name">Crazy Column</div>
+      <div class="wrap-gif">
+        <img class="gif" src="./preview-crazy-column.gif" />
+      </div>
+      <div id="trigger" class="trigger">Click here to Play</div>
+    </div>
+    <div id="layout" class="layout">
+      <div class="title">Select Difficult Mode</div>
+
+      <div class="wrap-btn">
+        <button id="btn-easy">Easy</button>
+        <button id="btn-normal">Normal</button>
+        <button id="btn-hard">Hard</button>
+      </div>
+    </div>
+    <script src="gameManager.js"></script>
+  </body>
 </html>
-
