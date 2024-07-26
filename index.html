@@ -6,129 +6,103 @@
     <script src="game.js"></script>
     <script src="sprite.js"></script>
     <script src="SFX.js"></script>
-    <script></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Silkscreen:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       * {
         padding: 0;
         margin: 0;
         box-sizing: border-box;
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: "Silkscreen", sans-serif;
       }
-      .layout {
-        width: 800px;
-        height: 140px;
-        background-color: #00000096;
-        position: absolute;
-        top: 230px;
+      .container {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+      }
+      .bg {
+        background-image: url("./assets/bg.jpg");
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        justify-content: center;
       }
       .title {
-        width: 100%;
-        font-size: 1.3rem;
-        color: white;
-        padding: 5px 0;
-        display: flex;
-        justify-content: center;
+        background-image: url("./game-title.png");
+        width: 400px;
+        height: 100px;
       }
-      button {
-        border: none;
-        outline: none;
-        padding: 10px 20px;
-        font-size: 2rem;
-        transition: 0.1s;
+      .ast {
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
       }
-      button:focus {
-        border: none;
-        outline: none;
-      }
-      button:hover {
+      .ui:hover {
         cursor: pointer;
         transform: translateY(-10px);
-        transition: 0.1s;
+        transition: 0.2s;
       }
-      .wrap-btn {
-        margin-top: 20px;
-        display: flex;
-        justify-content: center;
-        gap: 10px;
+      .ui {
+        transition: 0.2s;
+        width: 400px;
+        height: 125px;
       }
-      .wrap-btn button:nth-child(1) {
-        background-color: rgb(77, 233, 77);
-      }
-      .wrap-btn button:nth-child(2) {
-        background-color: rgb(223, 233, 77);
-      }
-      .wrap-btn button:nth-child(3) {
-        background-color: rgb(233, 77, 77);
-      }
-      .thumbnail {
-        width: 800px;
-        height: 600px;
-        background-color: green;
-      }
-      .name {
-        width: 100%;
-        display: flex;
-        font-size: 3rem;
-        padding-top: 20px;
-        color: white;
-        justify-content: center;
-      }
-      .gif {
-        margin-top: 20px;
-        width: 500px;
-        height: 400px;
-      }
-      .wrap-gif {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-      }
-      .trigger {
-        margin-top: 20px;
-        color: #fff;
-        font-size: 2rem;
-        display: flex;
-        justify-content: center;
-      }
-      .trigger:hover {
-        color: #ffffffa2;
+      .score:hover {
         cursor: pointer;
+        width: 175px;
+        height: 175px;
+        transition: 0.2s;
+      }
+      .score {
+        width: 150px;
+        height: 150px;
+        transition: 0.2s;
       }
     </style>
   </head>
 
   <body>
-    <canvas
-      id="game"
-      width="800"
-      height="600"
-      style="border: 1px solid #000000"
-    ></canvas>
-    <button
-      id="menu"
-      style="
-        text-shadow: 0px 3px 2px rgba(0, 0, 0, 0.6);
-        background-color: #fff;
-      "
-    >
-      Back to main menu
-    </button>
-    <div id="thumbnail" class="thumbnail">
-      <div class="name">Crazy Column</div>
-      <div class="wrap-gif">
-        <img class="gif" src="./preview-crazy-column.gif" />
-      </div>
-      <div id="trigger" class="trigger">Click here to Play</div>
-    </div>
-    <div id="layout" class="layout">
-      <div class="title">Select Difficult Mode</div>
-
-      <div class="wrap-btn">
-        <button id="btn-easy">Easy</button>
-        <button id="btn-normal">Normal</button>
-        <button id="btn-hard">Hard</button>
+    <div class="container">
+      <div class="bg ast">
+        <div style="width: auto">
+          <h1 style="font-size: 5rem; color: #fff; margin-top: 15rem">
+            Crazy column
+          </h1>
+          <div
+            style="
+              display: flex;
+              justify-content: center;
+              width: 100%;
+              margin-top: 4rem;
+            "
+          >
+            <a href="./game.html" onclick="GameStart()">
+              <img id="play-btn" class="ui" src="./assets/play-btn.png"
+            /></a>
+            <a href="score.html">
+              <img
+                class="score"
+                style="position: absolute; bottom: 20px; right: 50px"
+                src="./assets/button-scores.png"
+              />
+            </a>
+          </div>
+        </div>
       </div>
     </div>
-    <script src="gameManager.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function (event) {
+        localStorage.setItem("isGameStart", false);
+      });
+      const GameStart = () => {
+        localStorage.setItem("isGameStart", true);
+      };
+    </script>
   </body>
 </html>

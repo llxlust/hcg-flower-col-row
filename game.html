@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="./game.js"></script>
+    <script src="./SFX.js"></script>
+    <script src="./sprite.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      .score {
+        background-image: url("./assets/game-score.png");
+        width: 230px;
+        height: 200px;
+        background-size: cover; /* <------ */
+        background-repeat: no-repeat;
+        background-position: center center;
+        position: absolute;
+        right: 200px;
+        top: 150px;
+      }
+      #score {
+        position: absolute;
+        top: 75px;
+        right: 45%;
+        font-size: 4rem;
+        color: #fff;
+        font-weight: bolder;
+      }
+      body {
+        background-image: url("https://t3.ftcdn.net/jpg/05/69/17/24/360_F_569172436_3GqlVsozOK09JkbzJlWdZfjdRNvgHreM.jpg");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        width: 100%;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="hero"
+      style="display: flex; justify-content: center; margin-top: 8%"
+    >
+      <canvas
+        id="game"
+        width="800"
+        height="600"
+        style="border: 1px solid #000000"
+      ></canvas>
+      <div class="score">
+        <div style="position: relative">
+          <span id="score">0</span>
+        </div>
+      </div>
+    </div>
+    <div id="move"></div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function (event) {
+        const game = new Game();
+        window.game = game; //For debugging
+        if (localStorage.getItem("isGameStart")) [(window.game.start = true)];
+      });
+    </script>
+  </body>
+</html>

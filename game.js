@@ -3,7 +3,14 @@ class Game {
   constructor() {
     this.destroyList = [];
     this.start = false;
-    this.level = "";
+    this.over = false;
+    this.avaliable = [];
+    this.level = "Easy";
+    this.stageLevel = 0;
+    this.stageScore = 0;
+    this.moveLabel = document.getElementById("move");
+    this.targetLabel = document.getElementById("score");
+    this.possibleMove = 0;
     this.canvas = document.getElementById("game");
     this.context = this.canvas.getContext("2d");
     this.lastRefreshTime = Date.now();
@@ -118,6 +125,38 @@ class Game {
   setLevel(level) {
     this.level = level;
   }
+  checkAvaliableMove() {
+    for (let sprite of this.sprites) {
+      if (this.state != "ready") return;
+      //Need to find this sprite in the flowers grid
+      let row,
+        col,
+        found = false;
+      //First put flags to show if they have been checked
+      for (let sprite of this.sprites) sprite.checked = false;
+      let i = 0;
+      for (row of this.flowers) {
+        col = row.indexOf(sprite);
+        if (col != -1) {
+          //Found it
+          row = i;
+          found = true;
+          break;
+        }
+        i++;
+      }
+      if (found) {
+        const connected = this.getConnectedSprites(sprite.index, row, col);
+        if (connected.length > 2) {
+          const set = [];
+          for (let sprite of connected) {
+            set.push(sprite);
+          }
+          console.log(set, ":avaliable");
+        }
+      }
+    }
+  }
   update(dt) {
     if (this.start) {
       let removed;
@@ -149,6 +188,8 @@ class Game {
             delete this.removeInfo;
             this.removeGridGaps();
             this.state = "dropping";
+            this.avaliable = [];
+            this.possibleMove = 0;
             this.dropSfx.play();
           }
           break;
@@ -159,11 +200,28 @@ class Game {
           }
           break;
       }
-
+      if (this.state === "ready") {
+        this.moveLabel.innerHTML = `Move avaliable : ${this.possibleMove}`;
+      } else {
+        this.moveLabel.innerHTML = `Calculating . . .`;
+      }
       for (let sprite of this.sprites) {
         if (sprite == null) continue;
         sprite.update(dt);
       }
+      if (this.stageLevel === 0) {
+        this.stageScore = 30;
+        this.targetLabel.innerHTML = `${this.stageScore}`;
+      } else {
+        this.stageScore = (this.stageLevel + 1) * 30;
+        this.targetLabel.innerHTML = `${this.stageScore}`;
+      }
+
+      if (this.score >= this.stageScore) {
+        this.stageLevel++;
+        console.log(this.stageLevel, ":current stage");
+      }
+
       for (let sprite of this.sprites) {
         if (this.state != "ready") return;
         //Need to find this sprite in the flowers grid
@@ -203,6 +261,45 @@ class Game {
           // }
         }
       }
+      for (let sprite of this.sprites) {
+        if (this.state != "ready") return;
+        //Need to find this sprite in the flowers grid
+        let row,
+          col,
+          found = false;
+        //First put flags to show if they have been checked
+        for (let sprite of this.sprites) sprite.checked = false;
+        let i = 0;
+        for (row of this.flowers) {
+          col = row.indexOf(sprite);
+          if (col != -1) {
+            //Found it
+            row = i;
+            found = true;
+            break;
+          }
+          i++;
+        }
+        if (found) {
+          const connected = this.getConnectedSprites(sprite.index, row, col);
+          if (connected.length > 2) {
+            for (let sprite of connected) {
+              if (!this.avaliable.includes(sprite)) {
+                this.avaliable.push(sprite);
+                if (sprite === connected[connected.length - 1]) {
+                  this.possibleMove += 1;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    if (this.start && this.possibleMove === 0 && this.state === "ready") {
+      this.start = !this.start;
+      alert("Game over!,No move avaliable ");
+      location.reload();
     }
   }
 
@@ -341,6 +438,13 @@ class Game {
     str = String(this.score);
     txt = this.context.measureText(str);
     left = (this.gridSize.topleft.x - 32 - txt.width) / 2;
+    if (this.score < 0) {
+      this.context.fillStyle = "red";
+    } else if (this.score > 0) {
+      this.context.fillStyle = "green";
+    } else {
+      this.context.fillStyle = "black";
+    }
     this.context.fillText(this.score, left, 65);
   }
 
