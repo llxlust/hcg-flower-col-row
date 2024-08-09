@@ -4,8 +4,144 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      .hero {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100vh;
+        background-color: rgb(243, 90, 200);
+        align-items: center;
+        padding-top: 3rem;
+      }
+      .title {
+        font-size: 4rem;
+        color: #fff;
+      }
+      .mode {
+        display: flex;
+        font-size: 2rem;
+        margin-top: 20px;
+        color: #fff;
+      }
+      .mode > div {
+        width: 200px;
+        display: flex;
+        justify-content: center;
+      }
+      .mode > div:hover {
+        cursor: pointer;
+      }
+      .score {
+        height: 80%;
+        width: 600px;
+        background-color: #fff;
+      }
+      td {
+        text-align: center;
+        font-size: 2rem;
+      }
+      th {
+        font-size: 2rem;
+      }
+      .back {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 2rem;
+        background-color: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+      }
+      .back:hover {
+        cursor: pointer;
+      }
+    </style>
   </head>
   <body>
-    <h1>SCore page</h1>
+    <div class="hero">
+      <h1 class="title">SCORE BOARD</h1>
+      <div class="mode">
+        <div id="Easy" onclick="fetchData('Easy')">EASY</div>
+        <div id="Normal" onclick="fetchData('Normal')">NORMAL</div>
+        <div id="Hard" onclick="fetchData('Hard')">HARD</div>
+      </div>
+      <div class="score">
+        <table id="scoreboard" style="width: 100%"></table>
+      </div>
+      <a href="/"> <div class="back">BACK</div></a>
+    </div>
+    <script>
+      const fetchData = (mode) => {
+        fetch(`https://hcg-score-server.onrender.com/api/score/${mode}`)
+          .then((response) => response.json())
+          .then((json) => takeJson(json));
+      };
+      document.addEventListener("DOMContentLoaded", () => {
+        localStorage.setItem("scoremode", "Easy");
+        fetchData("Easy");
+        const element = document.getElementById("Easy");
+        element.style.backgroundColor = "#FFF";
+        element.style.color = "black";
+      });
+      const arr = ["Easy", "Normal", "Hard"];
+      arr.map((value) => {
+        const ele = document.getElementById(value);
+
+        ele.addEventListener("click", (e) => {
+          localStorage.setItem("scoremode", value);
+          arr.map((value) => {
+            const eleinner = document.getElementById(value);
+            if (eleinner.id !== localStorage.getItem("scoremode")) {
+              eleinner.style.backgroundColor = "transparent";
+              eleinner.style.color = "#FFF";
+            } else {
+              eleinner.style.backgroundColor = "#FFF";
+              eleinner.style.color = "black";
+            }
+          });
+          fetchData(value);
+        });
+      });
+
+      const takeJson = (json) => {
+        const ele = document.getElementById("scoreboard");
+        ele.innerHTML = "";
+        const th = document.createElement("tr");
+        const usernameHead = document.createElement("th");
+        usernameHead.innerHTML = "username";
+        usernameHead.style.width = "33%";
+        const scoreHead = document.createElement("th");
+        scoreHead.innerHTML = "score";
+        scoreHead.style.width = "33%";
+        const levelHead = document.createElement("th");
+        levelHead.innerHTML = "level";
+        levelHead.style.width = "33%";
+        th.appendChild(usernameHead);
+        th.appendChild(scoreHead);
+        th.appendChild(levelHead);
+        ele.appendChild(th);
+        json.data.map((value) => {
+          const tr = document.createElement("tr");
+          const username = document.createElement("td");
+          username.innerHTML = value.username;
+          const score = document.createElement("td");
+          score.innerHTML = value.score;
+          const level = document.createElement("td");
+          level.innerHTML = value.level;
+          tr.appendChild(username);
+          tr.appendChild(score);
+          tr.appendChild(level);
+          tr.style.width = "100%";
+          ele.appendChild(tr);
+        });
+      };
+    </script>
   </body>
 </html>

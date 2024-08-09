@@ -5,11 +5,12 @@ class Game {
     this.start = false;
     this.over = false;
     this.avaliable = [];
-    this.level = "Easy";
+    this.level = localStorage.getItem("level");
     this.stageLevel = 0;
     this.stageScore = 0;
     this.moveLabel = document.getElementById("move");
-    this.targetLabel = document.getElementById("score");
+    this.targetLabel = document.getElementById("target");
+    this.currentScore = document.getElementById("score");
     this.possibleMove = 0;
     this.canvas = document.getElementById("game");
     this.context = this.canvas.getContext("2d");
@@ -19,7 +20,12 @@ class Game {
     this.score = 0;
     this.spriteData;
     this.spriteImage;
+    this.barDt = 0;
+    this.barwidth = 100;
     this.flowers = [];
+    this.r = 36;
+    this.g = 156;
+    this.timebar = document.getElementById("current-bar");
     this.audioContext = new (window.AudioContext ||
       window.webkitAudioContext)();
 
@@ -159,6 +165,31 @@ class Game {
   }
   update(dt) {
     if (this.start) {
+      if (this.state === "ready") {
+        this.currentScore.innerHTML = String(this.score);
+        //console.log(`this.r :${this.r} | this.g :${this.g}`);
+        this.barDt += dt;
+        if (this.barDt) {
+          if (this.barwidth <= 0) {
+          }
+          this.barDt = 0;
+          let defalutDmg = 0.05;
+          let factor = 1 + this.score / 20;
+          if (this.score > 0) {
+            this.barwidth -= defalutDmg * factor;
+          } else {
+            this.barwidth -= defalutDmg * factor;
+          }
+
+          if (this.r < 156) {
+            this.r += 0.13 * factor;
+          } else {
+            this.g -= 0.13 * factor;
+          }
+          this.timebar.style.backgroundColor = `rgb(${this.r},${this.g},0)`;
+          this.timebar.style.width = `${this.barwidth}%`;
+        }
+      }
       let removed;
       do {
         removed = false;
@@ -201,9 +232,11 @@ class Game {
           break;
       }
       if (this.state === "ready") {
-        this.moveLabel.innerHTML = `Move avaliable : ${this.possibleMove}`;
+        this.moveLabel.innerHTML = `${this.possibleMove}`;
+        this.moveLabel.style.fontSize = "4rem";
       } else {
-        this.moveLabel.innerHTML = `Calculating . . .`;
+        this.moveLabel.innerHTML = `Calculating...`;
+        this.moveLabel.style.fontSize = "2rem";
       }
       for (let sprite of this.sprites) {
         if (sprite == null) continue;
@@ -248,6 +281,14 @@ class Game {
               sprite.state = sprite.states.die;
             }
             this.score -= connected.length;
+            console.log("trigger");
+            // this.timebar.style.width = `${this.barwidth - 10}%`;
+            // let currentColorDimesion = this.r + this.g;
+            // if (currentColorDimesion <= 156) {
+            //   this.g -= 19.2;
+            // } else {
+            //   this.r -= 19.2;
+            // }
             this.state = "removing";
             this.removeInfo = { count: 0, total: connected.length };
           }
@@ -296,10 +337,24 @@ class Game {
       }
     }
 
-    if (this.start && this.possibleMove === 0 && this.state === "ready") {
+    if (
+      (this.start && this.state === "ready" && this.possibleMove === 0) ||
+      (this.barwidth <= 0 && this.start && this.state === "ready") ||
+      (this.possibleMove <= 0 && this.start && this.state === "ready")
+    ) {
       this.start = !this.start;
-      alert("Game over!,No move avaliable ");
-      location.reload();
+      const msg =
+        this.possibleMove === 0
+          ? "No move avaliable "
+          : this.barwidth <= 0
+          ? "Time is over"
+          : "error";
+      const overmsg = document.getElementById("overmsg");
+      overmsg.innerHTML = msg;
+      const gameoverPanel = document.getElementById("gameover-panel");
+      gameoverPanel.style.top = "200px";
+      const scoreOver = document.getElementById("scoreOver");
+      scoreOver.innerHTML = `Your score is : ${this.score}`;
     }
   }
 
@@ -426,26 +481,6 @@ class Game {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     for (let sprite of this.sprites) sprite.render();
-
-    this.context.font = "20px Verdana";
-    this.context.fillStyle = "#999";
-    let str = "Score";
-    let txt = this.context.measureText(str);
-    let left = (this.gridSize.topleft.x - 32 - txt.width) / 2;
-    this.context.fillText("Score", left, 30);
-    this.context.font = "30px Verdana";
-    this.context.fillStyle = "#333";
-    str = String(this.score);
-    txt = this.context.measureText(str);
-    left = (this.gridSize.topleft.x - 32 - txt.width) / 2;
-    if (this.score < 0) {
-      this.context.fillStyle = "red";
-    } else if (this.score > 0) {
-      this.context.fillStyle = "green";
-    } else {
-      this.context.fillStyle = "black";
-    }
-    this.context.fillText(this.score, left, 65);
   }
 
   getMousePos(evt) {
@@ -506,6 +541,9 @@ class Game {
               this.score -= connected.length;
             } else {
               this.score += connected.length;
+              this.r = 36;
+              this.g = 156;
+              this.barwidth = 100;
             }
 
             this.state = "removing";

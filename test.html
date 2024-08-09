@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .testFront,
+      .testBack {
+        color: #fff;
+        font-size: 3rem;
+        height: 400px;
+        width: 300px;
+        position: absolute;
+        backface-visibility: hidden;
+        transition: 0.5s;
+      }
+      .testFront {
+        background-color: red;
+      }
+      .testBack {
+        background-color: blue;
+        transform: rotateY(180deg);
+      }
+      .card:hover .testFront {
+        transform: rotateY(-180deg);
+      }
+      .card:hover .testBack {
+        transform: rotateX(0deg);
+      }
+      .card {
+        width: auto;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card" style="position: relative">
+      <div class="testFront">front</div>
+      <div class="testBack">back</div>
+    </div>
+  </body>
+</html>

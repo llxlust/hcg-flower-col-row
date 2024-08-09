@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Silkscreen:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      .hero {
+        width: 100%;
+        height: 100vh;
+        background-image: url("https://img.freepik.com/free-vector/mining-miner-cartoon-composition-with-underground-scenery-vintage-mine-facilities-with-tools-hard-hat-vector-illustration_1284-70867.jpg");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      .title {
+        width: 100%;
+        font-family: "Silkscreen", sans-serif;
+        font-size: 5rem;
+        display: flex;
+        justify-content: center;
+        height: 20%;
+        color: white;
+        align-items: center;
+      }
+      .card-wrap {
+        display: flex;
+        width: 100%;
+        height: 60%;
+        justify-content: center;
+        align-items: center;
+        gap: 40px;
+      }
+      .card {
+        border-radius: 15px;
+        width: 350px;
+        background-color: #fff;
+        height: 450px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      .card-wrap > div:hover {
+        cursor: pointer;
+      }
+      .easy {
+        background-image: url("data:image/jpeg;base64,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");
+      }
+      .normal {
+        background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvZbK5ytmBDTsT2rZNK3x1XgCPb5OQZTk0GGMAf-Csui-A3fXN1gcEU4GtO2zEtrz8ypg&usqp=CAU");
+      }
+      .hard {
+        background-image: url("https://i2.wp.com/i.imgflip.com/6kbb0d.jpg");
+      }
+      .rele {
+        position: relative;
+        border-radius: 15px;
+        width: 350px;
+        height: 450px;
+      }
+      .back {
+        border-radius: 15px;
+        width: 350px;
+        background-color: #fff;
+        height: 450px;
+        transform: rotateY(180deg);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 3rem;
+        flex-direction: column;
+        filter: brightness(80%);
+      }
+      .front {
+      }
+      .front,
+      .back {
+        position: absolute;
+        background-color: #000;
+        backface-visibility: hidden;
+        transition: 0.9s;
+      }
+      .rele:hover .front {
+        transform: rotateY(-180deg);
+      }
+      .rele:hover .back {
+        transform: rotateY(0deg);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <div class="title">Level Select</div>
+      <div class="card-wrap">
+        <a href="./game.html">
+          <div
+            onmouseover="easySound('easy-audio')"
+            onmouseleave="easyStop('easy-audio')"
+            onclick="SetGameLevel('Easy')"
+            id="easy-card"
+            class="rele"
+          >
+            <div class="easy card front"></div>
+            <div class="back card">
+              <div style="color: rgb(253, 253, 253)">EASY</div>
+              <div>⭐</div>
+            </div>
+          </div>
+        </a>
+        <a href="./game.html">
+          <div
+            onmouseover="easySound('normal-audio')"
+            onmouseleave="easyStop('normal-audio')"
+            onclick="SetGameLevel('Normal')"
+            id="normal-card"
+            class="rele"
+          >
+            <div class="normal card front"></div>
+            <div class="back card">
+              <div style="color: rgb(240, 116, 0)">NORMAL</div>
+              <div>⭐⭐</div>
+            </div>
+          </div>
+        </a>
+        <a href="./game.html">
+          <div
+            onmouseover="easySound('hard-audio')"
+            onmouseleave="easyStop('hard-audio')"
+            onclick="SetGameLevel('Hard')"
+            id="hard-card"
+            class="rele"
+          >
+            <div class="hard card front" front></div>
+            <div class="back card">
+              <div style="color: red">HARD</div>
+              <div>⭐⭐⭐</div>
+            </div>
+          </div>
+        </a>
+      </div>
+      <audio id="easy-audio" src="./assets/easy.mp3"></audio>
+      <audio id="normal-audio" src="./assets/normal.mp3"></audio>
+      <audio id="hard-audio" src="./assets/hard.mp3"></audio>
+    </div>
+    <script>
+      const easySound = (id) => {
+        const soundElement = document.getElementById(id);
+        soundElement.currentTime = 0;
+        soundElement.play();
+      };
+      const easyStop = (id) => {
+        const soundElement = document.getElementById(id);
+        if (id === "normal-audio") {
+          soundElement.volume = 1;
+        }
+        soundElement.currentTime = 0;
+        soundElement.pause();
+      };
+      const SetGameLevel = (level) => {
+        localStorage.setItem("level", level);
+      };
+      const easy = document.getElementById("easy-card");
+      easy.addEventListener("");
+    </script>
+  </body>
+</html>

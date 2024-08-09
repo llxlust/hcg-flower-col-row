@@ -16,20 +16,41 @@
       }
       .score {
         background-image: url("./assets/game-score.png");
-        width: 230px;
-        height: 200px;
+        width: 250px;
+        height: 220px;
         background-size: cover; /* <------ */
         background-repeat: no-repeat;
         background-position: center center;
         position: absolute;
         right: 200px;
         top: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
       #score {
-        position: absolute;
-        top: 75px;
-        right: 45%;
+        margin-top: 20px;
         font-size: 4rem;
+        color: #fff;
+        font-weight: bolder;
+      }
+      .move {
+        background-image: url("./assets/game-moves.png");
+        width: 250px;
+        height: 220px;
+        background-size: cover; /* <------ */
+        background-repeat: no-repeat;
+        background-position: center center;
+        position: absolute;
+        right: 200px;
+        top: 400px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #move {
+        margin-top: 20px;
+        font-size: 2rem;
         color: #fff;
         font-weight: bolder;
       }
@@ -38,35 +59,154 @@
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
-        width: 100%;
         height: 100vh;
+      }
+      canvas {
+        margin-top: 8%;
+      }
+
+      #current-bar {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        background-color: rgb(44, 156, 0);
+        height: 100%;
+        transform: scaleX(1);
+      }
+
+      #bar-wrap {
+      }
+      button:focus {
+        border: none;
+        outline: none;
+      }
+      button {
+        border: none;
+        outline: none;
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        padding: 10px 30px;
+        border-radius: 20px;
+        transition: 0.5s;
+      }
+      button:hover {
+        cursor: pointer;
+        color: white;
+        transition: 0.5s;
+        transform: translateY(-10px);
       }
     </style>
   </head>
   <body>
-    <div
-      class="hero"
-      style="display: flex; justify-content: center; margin-top: 8%"
-    >
+    <div class="hero" style="display: flex; justify-content: center">
       <canvas
         id="game"
         width="800"
         height="600"
-        style="border: 1px solid #000000"
+        style="
+          background-color: #fff;
+          border-radius: 25px;
+          border: 10px solid rgb(87, 39, 0);
+          background-image: url('https://static.vecteezy.com/system/resources/previews/012/672/438/original/old-wooden-texture-cover-from-planks-ui-game-background-seamless-pattern-in-cartoon-style-isolated-detailed-textured-material-illustration-vector.jpg');
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-position: center;
+        "
       ></canvas>
       <div class="score">
-        <div style="position: relative">
-          <span id="score">0</span>
-        </div>
+        <span id="score">0</span>
+      </div>
+      <div class="move">
+        <span id="move">0</span>
       </div>
     </div>
     <div id="move"></div>
+    <div id="target"></div>
+    <div style="width: 100%; display: flex; justify-content: center">
+      <div
+        class=""
+        style="
+          width: 802px;
+          border: 2px solid black;
+          height: 40px;
+          position: relative;
+        "
+      >
+        <div id="current-bar"></div>
+      </div>
+      <div
+        id="gameover-panel"
+        style="
+          width: 800px;
+          height: 600px;
+          position: absolute;
+          background-color: rgba(0, 0, 0, 0.781);
+          transition: 1s;
+          top: -600px;
+        "
+      >
+        <div
+          style="
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding: 20px 30px;
+            color: white;
+            font-size: 3rem;
+            flex-direction: column;
+          "
+        >
+          <h1>Game Over!</h1>
+          <div id="overmsg" style="color: #fff">test msg</div>
+          <div id="scoreOver" style="color: #fff"></div>
+          <button
+            onclick="onSubmitScoreHandler()"
+            style="margin-top: 3rem; background-color: rgb(0, 162, 255)"
+          >
+            SUBMIT SCORE
+          </button>
+          <a href="/game.html">
+            <button style="background-color: green">PLAY AGAIN</button>
+          </a>
+
+          <a href="/"
+            ><button style="background-color: red">MAIN MENU</button></a
+          >
+        </div>
+      </div>
+    </div>
     <script>
       document.addEventListener("DOMContentLoaded", function (event) {
         const game = new Game();
         window.game = game; //For debugging
         if (localStorage.getItem("isGameStart")) [(window.game.start = true)];
       });
+      const onSubmitScoreHandler = () => {
+        let username = prompt("Please enter you name:");
+        var xhr = new XMLHttpRequest();
+        xhr.open(
+          "POST",
+          `https://hcg-score-server.onrender.com/api/submit`,
+          true
+        );
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onload = function () {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            // Request was successful
+            window.location.href = "/";
+          } else {
+            // Request failed
+            alert("Canot save score");
+          }
+        };
+        xhr.send(
+          JSON.stringify({
+            username,
+            score: window.game.score,
+            level: localStorage.getItem("level"),
+          })
+        );
+      };
     </script>
   </body>
 </html>
