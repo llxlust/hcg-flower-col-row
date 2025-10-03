@@ -160,53 +160,54 @@
           <div id="overmsg" style="color: #fff">test msg</div>
           <div id="scoreOver" style="color: #fff"></div>
           <button
-            onclick="onSubmitScoreHandler()"
+            onclick=""
             style="margin-top: 3rem; background-color: rgb(0, 162, 255)"
           >
-            SUBMIT SCORE
+            Download now
           </button>
-          <a href="/game.html">
+          <!-- <a href="/game.html">
             <button style="background-color: green">PLAY AGAIN</button>
           </a>
 
           <a href="/"
             ><button style="background-color: red">MAIN MENU</button></a
-          >
+          > -->
         </div>
       </div>
     </div>
     <script>
       document.addEventListener("DOMContentLoaded", function (event) {
+        localStorage.setItem("isGameStart", true);
         const game = new Game();
         window.game = game; //For debugging
         if (localStorage.getItem("isGameStart")) [(window.game.start = true)];
       });
-      const onSubmitScoreHandler = () => {
-        let username = prompt("Please enter you name:");
-        var xhr = new XMLHttpRequest();
-        xhr.open(
-          "POST",
-          `https://hcg-score-server.onrender.com/api/submit`,
-          true
-        );
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.onload = function () {
-          if (xhr.status >= 200 && xhr.status < 300) {
-            // Request was successful
-            window.location.href = "/";
-          } else {
-            // Request failed
-            alert("Canot save score");
-          }
-        };
-        xhr.send(
-          JSON.stringify({
-            username,
-            score: window.game.score,
-            level: localStorage.getItem("level"),
-          })
-        );
-      };
+      // const onSubmitScoreHandler = () => {
+      //   let username = prompt("Please enter you name:");
+      //   var xhr = new XMLHttpRequest();
+      //   xhr.open(
+      //     "POST",
+      //     `https://hcg-score-server.onrender.com/api/submit`,
+      //     true
+      //   );
+      //   xhr.setRequestHeader("Content-Type", "application/json");
+      //   xhr.onload = function () {
+      //     if (xhr.status >= 200 && xhr.status < 300) {
+      //       // Request was successful
+      //       window.location.href = "/";
+      //     } else {
+      //       // Request failed
+      //       alert("Canot save score");
+      //     }
+      //   };
+      //   xhr.send(
+      //     JSON.stringify({
+      //       username,
+      //       score: window.game.score,
+      //       level: localStorage.getItem("level"),
+      //     })
+      //   );
+      // };
     </script>
   </body>
 </html>

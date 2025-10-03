@@ -173,7 +173,7 @@ class Game {
           if (this.barwidth <= 0) {
           }
           this.barDt = 0;
-          let defalutDmg = 0.05;
+          let defalutDmg = 0.2;
           let factor = 1 + this.score / 20;
           if (this.score > 0) {
             this.barwidth -= defalutDmg * factor;
